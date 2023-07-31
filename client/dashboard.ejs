@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
+  <style>
+    /* Styling for user picture */
+    .user-picture {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      margin: 0 auto 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Main container to center content -->
+  <div class="vh-100 d-flex justify-content-center align-items-center">
+    <div class="container text-center">
+      <!-- Welcome message with user's first and last name -->
+      <h1 class="mb-5">
+        Welcome <%= user.name.first %> <%= user.name.last %>!
+      </h1>
+      <div class="row d-flex justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+          <div class="card bg-white rounded-4">
+            <div class="card-body p-5 text-center">
+              <!-- User picture -->
+              <img src="<%= user.picture %>" alt="User Picture" class="w-25 rounded-circle mb-3" />
+              <div class="text-start">
+                <!-- User details -->
+                <p><strong>Email:</strong> <%= user.email %></p>
+                <p><strong>Age:</strong> <%= user.age %></p>
+                <p><strong>Status:</strong> <%= user.isActive ? 'Active' : 'Inactive' %></p>
+                <p><strong>Eye Color:</strong> <%= user.eyeColor %></p>
+                <p><strong>Company:</strong> <%= user.company %></p>
+                <p><strong>Phone:</strong> <%= user.phone %></p>
+                <p><strong>Address:</strong> <%= user.address %></p>
+              </div>
+
+              <div class="text-start d-flex flex-wrap justify-content-between">
+                <!-- Link to check account balance -->
+                <a href="/balance" class="btn btn-primary navigation-link mb-2">
+                  <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bank"
+                      viewBox="0 0 16 16">
+                      <path
+                        d="m8 0 6.61 3h.89a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v7a.5.5 0 0 1 .485.38l.5 2a.498.498 0 0 1-.485.62H.5a.498.498 0 0 1-.485-.62l.5-2A.501.501 0 0 1 1 13V6H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 3h.89L8 0ZM3.777 3h8.447L8 1 3.777 3ZM2 6v7h1V6H2Zm2 0v7h2.5V6H4Zm3.5 0v7h1V6h-1Zm2 0v7H12V6H9.5ZM13 6v7h1V6h-1Zm2-1V4H1v1h14Zm-.39 9H1.39l-.25 1h13.72l-.25-1Z" />
+                    </svg></span>
+                  Check Account Balance
+                </a>
+                <!-- Link to edit account details -->
+                <a href="/edit" class="btn btn-primary navigation-link mb-2">
+                  <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                      class="bi bi-pencil-square" viewBox="0 0 16 16">
+                      <path
+                        d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                      <path fill-rule="evenodd"
+                        d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                    </svg></span>
+                  Edit Account Details
+                </a>
+                <!-- Logout button -->
+                <button id="logoutButton" class="btn btn-danger mb-2">
+                  <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                      class="bi bi-arrow-bar-left" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd"
+                        d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5ZM10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5Z" />
+                    </svg></span>
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Function to handle logout
+    const handleLogout = async () => {
+      try {
+        const response = await fetch("/api/logout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        // If logout is successful, redirect to the login page
+        if (response.ok) {
+          window.location.href = "/login";
+        } else {
+          console.error("Logout failed");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    // Add event listener to the logout button
+    document
+      .getElementById("logoutButton")
+      .addEventListener("click", handleLogout);
+  </script>
+</body>
+
+</html>
